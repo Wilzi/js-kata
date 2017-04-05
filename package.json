@@ -1,0 +1,22 @@
+{
+  "name": "js-kata",
+  "version": "1.0.0",
+  "description": "kata",
+  "main": "src/index.js",
+  "repository": "",
+  "scripts": {
+    "watch": "gulp watch",
+    "test": "gulp test"
+  },
+  "author": "pilou, wilzi",
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "3.5.0",
+    "eslint": "3.19.0",
+    "gulp": "3.9.1",
+    "gulp-eslint": "3.0.1",
+    "gulp-mocha": "4.3.0",
+    "gulp-watch": "4.3.11",
+    "mocha": "3.2.0"
+  }
+}
