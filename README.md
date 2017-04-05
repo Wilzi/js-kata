@@ -1,5 +1,9 @@
 ### Install
 
+ 1. Clone this repo
+ 
+ 2. Run command:
+
   ```
   npm i
   ```
