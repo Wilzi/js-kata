@@ -72,6 +72,11 @@ describe('Calculator', function() {
       const result = subject.calculate('2', '+', '3', '*', '6');
       expect(20).to.be.equal(result);
     });
+
+    it('should return 8 when 2^3 given', function() {
+      const result = subject.calculate('2', '^', '3');
+      expect(8).to.be.equal(result);
+    });
   });
 
 });
