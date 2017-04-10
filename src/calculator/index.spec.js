@@ -32,7 +32,7 @@ describe('Calculator', function() {
     });
   });
 
-  describe('calculate', function() {
+  describe('calculate with multiple string arguments', function() {
     it('should return 2 when 1+1 given', function() {
       const result = subject.calculate('1', '+', '1');
       expect(2).to.be.equal(result);
@@ -88,4 +88,12 @@ describe('Calculator', function() {
       expect(9.424).to.be.closeTo(result, 0.001);
     });
   });
+
+  describe('calculate with single string argument', function() {
+    it('should return 12 when 11+1 given', function() {
+      const result = subject.calculate('11+1');
+      expect(12).to.be.equal(result);
+    });
+  });
+
 });
