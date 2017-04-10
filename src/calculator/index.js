@@ -53,7 +53,7 @@ class Calculator {
 
   _calculatePrimalOperations(ops) {
     for(let i = 0; i < ops.length; i++) {
-      let operator = ops[i];
+      const operator = ops[i];
       if (!this._isOperator(operator)) {
         continue;
       }
@@ -61,8 +61,8 @@ class Calculator {
         continue;
       }
 
-      let previousOperand = ops[i-1];
-      let nextOperand = ops[i+1];
+      const previousOperand = ops[i-1];
+      const nextOperand = ops[i+1];
 
       ops[i-1] = this._doCalculate([previousOperand, operator, nextOperand]);
       ops.splice(i, 2);
@@ -73,7 +73,7 @@ class Calculator {
 
   _doOperation(acc, val, index, originalArray) {
     if(this._isOperator(val)) {
-      let firstOperator = parseInt(originalArray[index+1]);
+      const firstOperator = parseInt(originalArray[index+1]);
       return this.operators[val].calculus(acc, firstOperator);
     }
     return acc;
