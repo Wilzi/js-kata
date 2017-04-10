@@ -7,7 +7,7 @@ describe('Calculator', function() {
   let subject;
 
   beforeEach(function() {
-    subject = Calculator.create()
+    subject = Calculator.create();
   });
 
   describe('sum', function() {
@@ -63,7 +63,7 @@ describe('Calculator', function() {
       expect(10).to.be.equal(result);
     });
 
-    it.skip('should return Infinite when 9/0 given', function() {
+    it('should return Infinity when 9/0 given', function() {
       const result = subject.calculate('9', '/', '0');
       expect(Infinity).to.be.equal(result);
     });
@@ -71,6 +71,11 @@ describe('Calculator', function() {
     it('should return 20 when 2+3*6 given', function() {
       const result = subject.calculate('2', '+', '3', '*', '6');
       expect(20).to.be.equal(result);
+    });
+
+    it('should return 8 when 2^3 given', function() {
+      const result = subject.calculate('2', '^', '3');
+      expect(8).to.be.equal(result);
     });
   });
 
