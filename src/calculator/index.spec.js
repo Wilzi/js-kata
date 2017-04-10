@@ -82,6 +82,10 @@ describe('Calculator', function() {
       const result = subject.calculate('1', '-', '1.1');
       expect(-0.1).to.be.closeTo(result, 0.1);
     });
-  });
 
+    it('should return 9.424 when 3*π (pi) given', function() {
+      const result = subject.calculate('3', '*', 'π');
+      expect(9.424).to.be.closeTo(result, 0.001);
+    });
+  });
 });
