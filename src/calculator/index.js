@@ -21,7 +21,11 @@ class Calculator {
 
   calculate() {
     let argsArr = Array.from(arguments);
-    return this._doCalculate(this._calculatePrimalOperations(argsArr));
+    try {
+      return this._doCalculate(this._calculatePrimalOperations(argsArr));
+    } catch (err) {
+      return err;
+    }
   }
 
   _doCalculate(array) {
@@ -41,6 +45,10 @@ class Calculator {
 
       let previousOperand = ops[i-1];
       let nextOperand = ops[i+1];
+
+      if (operator === '/' && parseInt(nextOperand) === 0) {
+        throw Infinity;
+      }
 
       ops[i-1] = this._doCalculate([previousOperand, operator, nextOperand]);
       ops.splice(i, 2);
