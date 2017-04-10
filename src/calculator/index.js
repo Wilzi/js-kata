@@ -3,6 +3,10 @@
 class Calculator {
 
   constructor() {
+    this.mathSymbols = {
+      'π': Math.PI
+    };
+
     this.operators = {
       '^': {
         isPrimal: true,
@@ -39,12 +43,18 @@ class Calculator {
   }
 
   calculate() {
-    let argsArr = Array.from(arguments);
+    const argsArr = Array.from(arguments);
+    const replacedMathSymbols = this._replaceMathSymbols(argsArr);
+
     try {
-      return this._doCalculate(this._calculatePrimalOperations(argsArr));
+      return this._doCalculate(this._calculatePrimalOperations(replacedMathSymbols));
     } catch (err) {
       return err;
     }
+  }
+
+  _replaceMathSymbols(array) {
+    return array.map(a => this.mathSymbols[a] ? this.mathSymbols[a] : a);
   }
 
   _doCalculate(array) {
