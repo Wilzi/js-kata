@@ -7,7 +7,7 @@ describe('Calculator', function() {
   let subject;
 
   beforeEach(function() {
-    subject = Calculator.create()
+    subject = Calculator.create();
   });
 
   describe('sum', function() {
@@ -63,7 +63,7 @@ describe('Calculator', function() {
       expect(10).to.be.equal(result);
     });
 
-    it.skip('should return Infinite when 9/0 given', function() {
+    it('should return Infinity when 9/0 given', function() {
       const result = subject.calculate('9', '/', '0');
       expect(Infinity).to.be.equal(result);
     });

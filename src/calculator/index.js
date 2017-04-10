@@ -3,14 +3,14 @@
 class Calculator {
 
   constructor() {
-    this.operands = {
+    this.operators = {
       '*': (a, b) => a * b,
       '/': (a, b) => a / b,
       '-': (a, b) => a - b,
       '+': (a, b) => a + b
     };
 
-    this.operandsPriority = Object.keys(this.operands);
+    this.operatorPriorities = Object.keys(this.operators);
   }
 
   sum(numbers) {
@@ -21,39 +21,44 @@ class Calculator {
 
   calculate() {
     let argsArr = Array.from(arguments);
-    return this._doCalculate(this._orderByOperands(argsArr));
+    return this._doCalculate(this._calculatePrimalOperations(argsArr));
   }
 
   _doCalculate(array) {
     return array.reduce(this._doOperation.bind(this), parseInt(array[0]));
   }
 
-  _orderByOperands(ops) {
+  _calculatePrimalOperations(ops) {
     for(let i = 0; i < ops.length; i++) {
-      let val = ops[i];
-      if (!this._isOperand(val)) {
+      let operator = ops[i];
+      if (!this._isOperator(operator)) {
         continue;
       }
-      let priority = this.operandsPriority.indexOf(val) <= 1;
-
-      if (priority) {
-        ops[i-1] = this._doCalculate([ops[i-1], val, ops[i+1]]);
-        ops.splice(i, 2);
+      let isPrimalOperator = this.operatorPriorities.indexOf(operator) <= 1;
+      if (!isPrimalOperator) {
+        continue;
       }
+
+      let previousOperand = ops[i-1];
+      let nextOperand = ops[i+1];
+
+      ops[i-1] = this._doCalculate([previousOperand, operator, nextOperand]);
+      ops.splice(i, 2);
     }
 
     return ops;
   }
 
-  _doOperation(acc, val, index, tomi) {
-    if(this._isOperand(val)) {
-      return this.operands[val](acc, parseInt(tomi[index+1]));
+  _doOperation(acc, val, index, originalArray) {
+    if(this._isOperator(val)) {
+      let firstOperator = parseInt(originalArray[index+1]);
+      return this.operators[val](acc, firstOperator);
     }
     return acc;
   }
 
-  _isOperand(val) {
-    return this.operands[val];
+  _isOperator(val) {
+    return this.operators[val];
   }
 
   static create() {
