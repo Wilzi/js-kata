@@ -4,6 +4,10 @@ class Calculator {
 
   constructor() {
     this.operators = {
+      '^': {
+        isPrimal: true,
+        calculus:(a, b) => Math.pow(a, b)
+      },
       '*': {
         isPrimal: true,
         calculus:(a, b) => a * b
