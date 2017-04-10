@@ -48,7 +48,7 @@ class Calculator {
   }
 
   _doCalculate(array) {
-    return array.reduce(this._doOperation.bind(this), parseInt(array[0]));
+    return array.reduce(this._doOperation.bind(this), parseFloat(array[0]));
   }
 
   _calculatePrimalOperations(ops) {
@@ -73,7 +73,7 @@ class Calculator {
 
   _doOperation(acc, val, index, originalArray) {
     if(this._isOperator(val)) {
-      const firstOperator = parseInt(originalArray[index+1]);
+      const firstOperator = parseFloat(originalArray[index+1]);
       return this.operators[val].calculus(acc, firstOperator);
     }
     return acc;
