@@ -77,6 +77,11 @@ describe('Calculator', function() {
       const result = subject.calculate('2', '^', '3');
       expect(8).to.be.equal(result);
     });
+
+    it('should return -0.1 when 1-1.1 given', function() {
+      const result = subject.calculate('1', '-', '1.1');
+      expect(-0.1).to.be.equal(result);
+    });
   });
 
 });
