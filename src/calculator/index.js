@@ -4,13 +4,28 @@ class Calculator {
 
   constructor() {
     this.operators = {
-      '*': (a, b) => a * b,
-      '/': (a, b) => a / b,
-      '-': (a, b) => a - b,
-      '+': (a, b) => a + b
+      '*': {
+        isPrimal: true,
+        calculus:(a, b) => a * b
+      },
+      '/': {
+        isPrimal: true,
+        calculus:(a, b) => {
+          if (b === 0) {
+            throw Infinity;
+          }
+          return a / b;
+        }
+      },
+      '-': {
+        isPrimal: false,
+        calculus:(a, b) => a - b
+      },
+      '+': {
+        isPrimal: false,
+        calculus:(a, b) => a + b
+      }
     };
-
-    this.operatorPriorities = Object.keys(this.operators);
   }
 
   sum(numbers) {
@@ -38,17 +53,12 @@ class Calculator {
       if (!this._isOperator(operator)) {
         continue;
       }
-      let isPrimalOperator = this.operatorPriorities.indexOf(operator) <= 1;
-      if (!isPrimalOperator) {
+      if (!this.operators[operator].isPrimal) {
         continue;
       }
 
       let previousOperand = ops[i-1];
       let nextOperand = ops[i+1];
-
-      if (operator === '/' && parseInt(nextOperand) === 0) {
-        throw Infinity;
-      }
 
       ops[i-1] = this._doCalculate([previousOperand, operator, nextOperand]);
       ops.splice(i, 2);
@@ -60,7 +70,7 @@ class Calculator {
   _doOperation(acc, val, index, originalArray) {
     if(this._isOperator(val)) {
       let firstOperator = parseInt(originalArray[index+1]);
-      return this.operators[val](acc, firstOperator);
+      return this.operators[val].calculus(acc, firstOperator);
     }
     return acc;
   }
