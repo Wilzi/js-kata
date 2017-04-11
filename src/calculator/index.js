@@ -30,7 +30,7 @@ class Calculator {
   }
 
   _breakDownToNumbersAndOperators(array) {
-    return _.flatten(array.map(a => a.split(/(\d+)/).filter(e => e)));
+    return _.flatten(array.map(a => a.split(/([\d.]+)/).filter(e => e)));
   }
 
   _replaceMathSymbols(array) {
