@@ -4,6 +4,7 @@
   "description": "kata",
   "main": "src/index.js",
   "repository": "",
+  "precommit": "eslint",
   "scripts": {
     "watch": "gulp watch",
     "test": "gulp test",
@@ -19,6 +20,7 @@
     "gulp-mocha": "4.3.0",
     "gulp-watch": "4.3.11",
     "lodash": "^4.17.4",
-    "mocha": "3.2.0"
+    "mocha": "3.2.0",
+    "pre-commit": "1.2.2"
   }
 }
