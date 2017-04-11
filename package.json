@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "kata",
   "main": "src/index.js",
-  "repository": "",
+  "repository": "https://github.com/Wilzi/js-kata",
   "precommit": "eslint",
   "scripts": {
     "watch": "gulp watch",
