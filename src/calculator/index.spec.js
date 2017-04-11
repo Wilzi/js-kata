@@ -106,7 +106,8 @@ describe('Calculator', function() {
     });
 
     it.skip('should return Error when 1a1+1 given', function() {
-      expect(err)
+      const result = subject.calculate('1a1+1');
+      expect(result)
         .to.be.a('error')
         .to.have.property('message', '1a1 is not a number');
     });
