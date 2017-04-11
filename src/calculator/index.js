@@ -6,6 +6,12 @@ const mathSymbols = require('./math-symbols');
 const operators = require('./operators');
 
 class Calculator {
+
+  constructor() {
+    this._primalOperators = _.keys(_.pickBy(operators, o => o.isPrimal));
+    this._nonPrimalOperators = _.keys(_.pickBy(operators, o => !o.isPrimal));
+  }
+
   sum(numbers) {
     return numbers.split(',')
       .map(a => parseFloat(a) || 0)
@@ -14,7 +20,7 @@ class Calculator {
 
   calculate() {
     try {
-      return this._flowOperations(Array.from(arguments));
+      return this._flowOperations(Array.from(arguments).join(''));
     } catch (err) {
       return err;
     }
@@ -22,48 +28,36 @@ class Calculator {
 
   _flowOperations(input) {
     return _.flow([
-      this._breakDownToNumbersAndOperators,
       this._replaceMathSymbols,
-      this._calculatePrimalOperations.bind(this),
-      this._doCalculate.bind(this)
+      this._recursiveCalculator.bind(this, this._primalOperators),
+      this._recursiveCalculator.bind(this, this._nonPrimalOperators),
+      result => parseFloat(result)
     ])(input);
   }
 
-  _breakDownToNumbersAndOperators(array) {
-    return _.flatten(array.map(a => a.split(/(\d+)/).filter(e => e)));
+  _replaceMathSymbols(str) {
+    const regexp = new RegExp(`([${Object.keys(mathSymbols)}])`, 'g');
+    return str.replace(regexp, m => mathSymbols[m]);
   }
 
-  _replaceMathSymbols(array) {
-    return array.map(a => mathSymbols[a] || a);
-  }
+  _recursiveCalculator(operators, str) {
+    const pattern = this._getPattern(operators);
 
-  _calculatePrimalOperations(ops) {
-    for (let i = 0; i < ops.length; i++) {
-      const operator = ops[i];
-      if (!operators[operator] || !operators[operator].isPrimal) {
-        continue;
-      }
-
-      const previousOperand = ops[i - 1];
-      const nextOperand = ops[i + 1];
-
-      ops[i - 1] = this._doCalculate([previousOperand, operator, nextOperand]);
-      ops.splice(i, 2);
+    if (str.match(pattern)) {
+      const recalculated = str.replace(pattern, this._replace.bind(this));
+      return this._recursiveCalculator(operators, recalculated);
     }
 
-    return ops;
+    return str;
   }
 
-  _doCalculate(array) {
-    return array.reduce(this._doOperation.bind(this), parseFloat(array[0]));
+  _getPattern(operators) {
+    const escapedOperators = operators.map(o => `\\${o}`);
+    return new RegExp(`([0-9.]+)([${escapedOperators}])([0-9.]+)`);
   }
 
-  _doOperation(acc, val, index, originalArray) {
-    if (operators[val]) {
-      const firstOperator = parseFloat(originalArray[index + 1]);
-      return operators[val].calculus(acc, firstOperator);
-    }
-    return acc;
+  _replace(match, d1, operator, d2) {
+    return operators[operator].calculus(parseFloat(d1), parseFloat(d2));
   }
 
   static create() {
