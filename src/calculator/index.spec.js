@@ -94,6 +94,11 @@ describe('Calculator', function() {
       const result = subject.calculate('11+1');
       expect(12).to.be.equal(result);
     });
+
+    it('should return 15 when 11+1+3 given', function() {
+      const result = subject.calculate('11+1+3');
+      expect(15).to.be.equal(result);
+    });
   });
 
 });

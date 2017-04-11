@@ -7,7 +7,7 @@ class Calculator {
       'π': Math.PI
     };
 
-    this.operators = {
+    this.operatorDefinitions = {
       '^': {
         isPrimal: true,
         calculus:(a, b) => Math.pow(a, b)
@@ -34,6 +34,7 @@ class Calculator {
         calculus:(a, b) => a + b
       }
     };
+    this.operators = Object.keys(this.operatorDefinitions);
   }
 
   sum(numbers) {
@@ -44,17 +45,31 @@ class Calculator {
 
   calculate() {
     const argsArr = Array.from(arguments);
-    const replacedMathSymbols = this._replaceMathSymbols(argsArr);
+    let numbersAndOperators = this._breakDownToNumbersAndOperators(argsArr);
+    numbersAndOperators = this._replaceMathSymbols(numbersAndOperators);
 
     try {
-      return this._doCalculate(this._calculatePrimalOperations(replacedMathSymbols));
+      return this._doCalculate(this._calculatePrimalOperations(numbersAndOperators));
     } catch (err) {
       return err;
     }
   }
 
+  _breakDownToNumbersAndOperators(array) {
+    for(let i = 0; i < array.length; i++) {
+      const expression = array[i];
+      this.operators.forEach(operator => {
+          let expParts = expression.split(operator);
+          if (expParts[1]) {
+            array.splice(i, 1, expParts[0], operator, expParts[1]);
+          }
+      });
+    }
+    return array;
+  }
+
   _replaceMathSymbols(array) {
-    return array.map(a => this.mathSymbols[a] ? this.mathSymbols[a] : a);
+    return array.map(a => this.mathSymbols[a] || a);
   }
 
   _doCalculate(array) {
@@ -67,7 +82,7 @@ class Calculator {
       if (!this._isOperator(operator)) {
         continue;
       }
-      if (!this.operators[operator].isPrimal) {
+      if (!this.operatorDefinitions[operator].isPrimal) {
         continue;
       }
 
@@ -84,13 +99,13 @@ class Calculator {
   _doOperation(acc, val, index, originalArray) {
     if(this._isOperator(val)) {
       const firstOperator = parseFloat(originalArray[index+1]);
-      return this.operators[val].calculus(acc, firstOperator);
+      return this.operatorDefinitions[val].calculus(acc, firstOperator);
     }
     return acc;
   }
 
   _isOperator(val) {
-    return this.operators[val];
+    return this.operatorDefinitions[val];
   }
 
   static create() {
