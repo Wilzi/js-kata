@@ -19,7 +19,6 @@
     "gulp-eslint": "3.0.1",
     "gulp-mocha": "4.3.0",
     "gulp-watch": "4.3.11",
-    "lodash": "^4.17.4",
     "mocha": "3.2.0",
     "pre-commit": "1.2.2"
   }
