@@ -100,7 +100,7 @@ describe('Calculator', function() {
       expect(15).to.be.equal(result);
     });
 
-    it.skip('should return 2.1 when 1.1+1 given', function() {
+    it('should return 2.1 when 1.1+1 given', function() {
       const result = subject.calculate('1.1+1');
       expect(2.1).to.be.equal(result);
     });
