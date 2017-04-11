@@ -34,7 +34,6 @@ class Calculator {
         calculus:(a, b) => a + b
       }
     };
-    this.operators = Object.keys(this.operatorDefinitions);
   }
 
   sum(numbers) {
@@ -56,16 +55,11 @@ class Calculator {
   }
 
   _breakDownToNumbersAndOperators(array) {
-    for(let i = 0; i < array.length; i++) {
-      const expression = array[i];
-      this.operators.forEach(operator => {
-          let expParts = expression.split(operator);
-          if (expParts[1]) {
-            array.splice(i, 1, expParts[0], operator, expParts[1]);
-          }
-      });
-    }
-    return array;
+    return this._flattenArray(array.map(a => a.split(/(\d+)/).filter(e => e)));
+  }
+
+  _flattenArray(array) {
+    return [].concat.apply([], array);
   }
 
   _replaceMathSymbols(array) {
