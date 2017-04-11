@@ -44,17 +44,17 @@ class Calculator {
 
   calculate() {
     const argsArr = Array.from(arguments);
-    const replacedMathSymbols = this._replaceMathSymbols(argsArr);
+    const numbersAndOperators = this._replaceMathSymbols(argsArr);
 
     try {
-      return this._doCalculate(this._calculatePrimalOperations(replacedMathSymbols));
+      return this._doCalculate(this._calculatePrimalOperations(numbersAndOperators));
     } catch (err) {
       return err;
     }
   }
 
   _replaceMathSymbols(array) {
-    return array.map(a => this.mathSymbols[a] ? this.mathSymbols[a] : a);
+    return array.map(a => this.mathSymbols[a] || a);
   }
 
   _doCalculate(array) {
