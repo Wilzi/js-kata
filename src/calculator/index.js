@@ -6,6 +6,10 @@ const mathSymbols = require('./math-symbols');
 const operators = require('./operators');
 
 class Calculator {
+  constructor() {
+    this._allowedCharsPattern = new RegExp(`[^.0-9${this._getEscapedOperators()}]+`, 'g');
+  }
+
   sum(numbers) {
     return numbers.split(',')
       .map(a => parseFloat(a) || 0)
@@ -22,15 +26,33 @@ class Calculator {
 
   _flowOperations(input) {
     return _.flow([
-      this._breakDownToNumbersAndOperators,
+      this._breakDownToNumbersAndOperators.bind(this),
       this._replaceMathSymbols,
+      this._validate.bind(this),
       this._calculatePrimalOperations.bind(this),
       this._doCalculate.bind(this)
     ])(input);
   }
 
+  _validate(str) {
+    return str.map(this._validateParameter.bind(this));
+  }
+
+  _validateParameter(param) {
+    if((param+'').match(this._allowedCharsPattern)) {
+      throw Error(`${param} is not a number`);
+    }
+
+    return param;
+  }
+
   _breakDownToNumbersAndOperators(array) {
-    return _.flatten(array.map(a => a.split(/([\d.]+)/).filter(e => e)));
+    const operatorsPattern = new RegExp(`([${this._getEscapedOperators()}])`);
+    return _.flatten(array.map(a => a.split(operatorsPattern).filter(e => e)));
+  }
+
+  _getEscapedOperators() {
+    return Object.keys(operators).map(o => `\\${o}`).join('');
   }
 
   _replaceMathSymbols(array) {
