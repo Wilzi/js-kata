@@ -18,6 +18,8 @@ gulp.task('eslint:code', () => {
     .pipe(eslint.failAfterError());
 });
 
+gulp.task('eslint', ['eslint:tests', 'eslint:code']);
+
 gulp.task('mochaTest', () => {
   return gulp.src('src/**/*.spec.js', { read: false }).pipe(mocha({ reporter: 'dot' }));
 });
@@ -26,5 +28,5 @@ gulp.task('watch', ['test'], () => {
   gulp.watch('src/**/*.js', ['mochaTest']);
 });
 
-gulp.task('test', ['eslint:tests', 'eslint:code', 'mochaTest']);
+gulp.task('test', ['eslint', 'mochaTest']);
 gulp.task('default', ['clean:dist', 'test', 'build', 'compress']);

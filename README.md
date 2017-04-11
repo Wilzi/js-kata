@@ -13,9 +13,15 @@
   ```
   npm test
   ```
-  
+
 ### Run watch tests
 
   ```
   npm run watch
+  ```
+
+### Run eslint
+
+  ```
+  npm run eslint
   ```
