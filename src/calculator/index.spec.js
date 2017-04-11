@@ -104,6 +104,12 @@ describe('Calculator', function() {
       const result = subject.calculate('1.1+1');
       expect(result).to.be.equal(2.1);
     });
+
+    it.skip('should return Error when 1a1+1 given', function() {
+      expect(err)
+        .to.be.a('error')
+        .to.have.property('message', '1a1 is not a number');
+    });
   });
 
 });
