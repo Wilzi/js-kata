@@ -100,9 +100,19 @@ describe('Calculator', function() {
       expect(15).to.be.equal(result);
     });
 
-    it.skip('should return 2.1 when 1.1+1 given', function() {
+    it('should return 2.1 when 1.1+1 given', function() {
       const result = subject.calculate('1.1+1');
       expect(2.1).to.be.equal(result);
+    });
+
+    it('should return 3.1 when -1.1+1-3 given', function() {
+      const result = subject.calculate('-1.1+1-3');
+      expect(-3.1).to.be.equal(result);
+    });
+
+    it('should return 3.1 when -1.1+-1-3 given', function() {
+      const result = subject.calculate('-1.1+-1-3');
+      expect(-5.1).to.be.equal(result);
     });
   });
 
