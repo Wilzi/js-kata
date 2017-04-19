@@ -3,15 +3,13 @@
 const _ = require('lodash');
 
 const mathSymbols = require('./math-symbols');
-const operators = require('./operators');
+const operators = require('./operators').operators;
+const primalOperators = require('./operators').primalOperators;
+const nonPrimalOperators = require('./operators').nonPrimalOperators;
+
+const DECIMAL_NUMBER_PATTERN = '([-]?[0-9]*\\.?[0-9]+)';
 
 class Calculator {
-
-  constructor() {
-    this._primalOperators = _.keys(_.pickBy(operators, o => o.isPrimal));
-    this._nonPrimalOperators = _.keys(_.pickBy(operators, o => !o.isPrimal));
-  }
-
   sum(numbers) {
     return numbers.split(',')
       .map(a => parseFloat(a) || 0)
@@ -29,8 +27,8 @@ class Calculator {
   _flowOperations(input) {
     return _.flow([
       this._replaceMathSymbols,
-      this._recursiveCalculator.bind(this, this._primalOperators),
-      this._recursiveCalculator.bind(this, this._nonPrimalOperators),
+      this._recursiveCalculator.bind(this, this._getOperationPattern(primalOperators)),
+      this._recursiveCalculator.bind(this, this._getOperationPattern(nonPrimalOperators)),
       result => parseFloat(result)
     ])(input);
   }
@@ -40,25 +38,22 @@ class Calculator {
     return str.replace(regexp, m => mathSymbols[m]);
   }
 
-  _recursiveCalculator(operators, str) {
-    const pattern = this._getPattern(operators);
+  _getOperationPattern(operators) {
+    const escapedOperators = Object.keys(operators).map(o => `\\${o}`);
+    return new RegExp(`${DECIMAL_NUMBER_PATTERN}([${escapedOperators}])${DECIMAL_NUMBER_PATTERN}`);
+  }
 
+  _recursiveCalculator(pattern, str) {
     if (str.match(pattern)) {
-      const recalculated = str.replace(pattern, this._replace.bind(this));
-      return this._recursiveCalculator(operators, recalculated);
+      const recalculated = str.replace(pattern, this._replace);
+      return this._recursiveCalculator(pattern, recalculated);
     }
 
     return str;
   }
 
-  _getPattern(operators) {
-    const floatPattern = '([-+]?[0-9]*\\.?[0-9]+)';
-    const escapedOperators = operators.map(o => `\\${o}`);
-    return new RegExp(`${floatPattern}([${escapedOperators}])${floatPattern}`);
-  }
-
   _replace(match, d1, operator, d2) {
-    return operators[operator].calculus(parseFloat(d1), parseFloat(d2));
+    return operators[operator](parseFloat(d1), parseFloat(d2));
   }
 
   static create() {

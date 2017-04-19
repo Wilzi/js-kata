@@ -1,29 +1,21 @@
 'use strict';
 
-module.exports = {
-  '^': {
-    isPrimal: true,
-    calculus: (a, b) => Math.pow(a, b)
-  },
-  '*': {
-    isPrimal: true,
-    calculus: (a, b) => a * b
-  },
-  '/': {
-    isPrimal: true,
-    calculus: (a, b) => {
-      if (b === 0) {
-        throw Infinity;
-      }
-      return a / b;
+const primalOperators = {
+  '^': (a, b) => Math.pow(a, b),
+  '*': (a, b) => a * b,
+  '/': (a, b) => {
+    if (b === 0) {
+      throw Infinity;
     }
-  },
-  '-': {
-    isPrimal: false,
-    calculus: (a, b) => a - b
-  },
-  '+': {
-    isPrimal: false,
-    calculus: (a, b) => a + b
+    return a / b;
   }
 };
+
+const nonPrimalOperators = {
+  '-': (a, b) => a - b,
+  '+': (a, b) => a + b
+};
+
+module.exports.operators = Object.assign({}, primalOperators, nonPrimalOperators);
+module.exports.primalOperators = primalOperators;
+module.exports.nonPrimalOperators = nonPrimalOperators;
